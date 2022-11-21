@@ -22,4 +22,5 @@ This repository is a starting point for assessments.
 - Run `./vendor/bin/sail artisan key:generate` to populate the `.env` file with an application key
 - Run `./vendor/bin/sail artisan migrate` to create the database
 - Run `./vendor/bin/sail npm install` to install NPM dependencies
+- Run `./vendor/bin/sail npm run dev` to start the Vite dev server
 - Visit [http://localhost:8084/register](http://localhost:8084/register) to make sure the set-up is working
