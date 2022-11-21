@@ -14,7 +14,8 @@ This repository is a starting point for assessments.
 ### Quick Start
 
 - Download [Docker Desktop](https://www.docker.com/products/docker-desktop/). 
-- Clone this repository
+- Clone this repository: `git clone git@gitlab.com:deal-assessments/laravel-breeze-inertia-vuejs.git`
+- Go to the directory: `cd laravel-breeze-inertia-vuejs`
 - Run `composer install` to install dependencies
 - Run `cp .env.example .env` to copy the example `.env` file
 - Run `./vendor/bin/sail up -d` to start the docker container
