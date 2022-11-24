@@ -20,6 +20,7 @@ class PostFactory extends Factory
     {
         return [
             'title' => $this->faker->title(),
+            'category_id' => rand(1, 6),
             'description' => $this->faker->text(),
         ];
     }

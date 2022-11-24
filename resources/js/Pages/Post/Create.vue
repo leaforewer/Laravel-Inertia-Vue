@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
@@ -15,10 +16,7 @@
                         <form @submit.prevent="submit">
                             <div>
                                 <label for="title">Title</label>
-                                <input
-                                    type="text"
-                                    v-model="form.title"
-                                    class="
+                                <input type="text" v-model="form.title" class="
                                         w-full
                                         px-4
                                         py-2
@@ -28,16 +26,27 @@
                                         focus:outline-none
                                         focus:ring-1
                                         focus:ring-blue-600
-                                    "
-                                />
+                                    " />
+                                <div class="bg-red-100 my-3 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                                    role="alert" v-if="errors.title">
+                                    <strong class="font-bold">{{ errors.title }}</strong>
+                                </div>
                             </div>
                             <div class="mt-4">
-                                <label for="title">Description</label>
-                                <textarea
-                                    name="description"
-                                    type="text"
-                                    v-model="form.description"
-                                    class="
+                                <label for="category">Category</label>
+                                <select class="block w-full mt-1 rounded-md" v-model="form.category_id"
+                                    name="category_id" id="category_id">
+                                    <option v-for="category in categories" :value="category.id">{{ category.name }}
+                                    </option>
+                                </select>
+                                <div class="bg-red-100 my-3 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                                    role="alert" v-if="errors.category_id">
+                                    <strong class="font-bold">Category is not selected</strong>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label for="description">Description</label>
+                                <textarea name="description" type="text" v-model="form.description" class="
                                         w-full
                                         px-4
                                         py-2
@@ -47,22 +56,23 @@
                                         focus:outline-none
                                         focus:ring-1
                                         focus:ring-blue-600
-                                    "
-                                >
+                                    ">
                                 </textarea>
+                                <div class="bg-red-100 my-3 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                                    role="alert" v-if="errors.description">
+                                    <strong class="font-bold">{{ errors.description }}</strong>
+                                </div>
                             </div>
 
                             <!-- submit -->
                             <div class="flex items-center mt-4">
-                                <button
-                                    class="
+                                <button class="
                                         px-6
                                         py-2
                                         text-white
                                         bg-gray-900
                                         rounded
-                                    "
-                                >
+                                    ">
                                     Save
                                 </button>
                             </div>
@@ -83,10 +93,15 @@ export default {
         AuthenticatedLayout,
         Head,
     },
+    props: {
+        categories: Object,
+        errors: Object,
+    },
     setup() {
         const form = useForm({
             title: null,
             description: null,
+            category_id: null,
         });
 
         return { form };

@@ -5,7 +5,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Post
+                Category
             </h2>
         </template>
 
@@ -14,8 +14,8 @@
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <div class="bg-green-100 my-3 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                            role="alert" v-if="flash.post_message">
-                            <strong class="font-bold">{{ flash.post_message }}</strong>
+                            role="alert" v-if="flash.cat_message">
+                            <strong class="font-bold">{{ flash.cat_message }}</strong>
                         </div>
                         <div class="mb-4">
                             <Link class="
@@ -25,40 +25,34 @@
                                     text-green-100
                                     bg-green-500
                                     rounded
-                                " :href="route('posts.create')">
-                            Posts Create
+                                " :href="route('categories.create')">
+                            Category Create
                             </Link>
                         </div>
                         <table class="w-full">
                             <thead class="font-bold bg-gray-300 border-b-2">
                                 <td class="px-4 py-2">ID</td>
-                                <td class="px-4 py-2">Category</td>
+                                <td class="px-4 py-2">Name</td>
                                 <td class="px-4 py-2">Slug</td>
-                                <td class="px-4 py-2">Title</td>
-                                <td class="px-4 py-2">Description</td>
-                                <td class="px-4 py-2">Action</td>
+                                <td class="px-4 py-2 text-right">Action</td>
                             </thead>
                             <tbody>
-                                <tr v-for="post in posts.data" :key="post.id">
-                                    <td class="px-4 py-2">{{ post.id }}</td>
-                                    <td class="px-4 py-2">{{ post.category.name }}</td>
-                                    <td class="px-4 py-2">{{ post.category.slug }}</td>
-                                    <td class="px-4 py-2">{{ post.title }}</td>
-                                    <td class="px-4 py-2">
-                                        {{ post.description }}
-                                    </td>
-                                    <td class="px-4 py-2 font-extrabold">
-                                        <Link class="text-green-700" :href="route('posts.edit', post.id)">
+                                <tr v-for="category in categories.data" :key="category.id">
+                                    <td class="px-4 py-2">{{ category.id }}</td>
+                                    <td class="px-4 py-2">{{ category.name }}</td>
+                                    <td class="px-4 py-2">{{ category.slug }}</td>
+                                    <td class="px-4 py-2 font-extrabold text-right">
+                                        <Link class="text-green-700" :href="route('categories.edit', category.id)">
                                         Edit
                                         </Link>
-                                        <Link @click="destroy(post.id)" class="text-red-700">Delete</Link>
+                                        <Link @click="destroy(category.id)" class="text-red-700">Delete</Link>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div v-if="posts.links.length > 3">
+                        <div v-if="categories.links.length > 3">
                             <div class="flex flex-wrap -mb-1 mt-3 justify-center">
-                                <template v-for="(link, p) in posts.links" :key="p">
+                                <template v-for="(link, p) in categories.links" :key="p">
                                     <div v-if="link.url === null"
                                         class="mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded"
                                         v-html="link.label" />
@@ -86,14 +80,13 @@ export default {
         Link,
     },
     props: {
-        posts: Object,
+        categories: Object,
         links: Array,
-        errors: Object,
         flash: Object,
     },
     methods: {
         destroy(id) {
-            this.$inertia.delete(route("posts.destroy", id));
+            this.$inertia.delete(route("categories.destroy", id));
         },
     },
 };

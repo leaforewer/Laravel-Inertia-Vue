@@ -5,7 +5,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Edit
+                Edit {{ form.name }} <br /> Id: {{ form.id }}
             </h2>
         </template>
 
@@ -15,8 +15,8 @@
                     <div class="p-6 bg-white border-b border-gray-200">
                         <form @submit.prevent="submit">
                             <div>
-                                <label for="category_id">Category</label>
-                                <input type="number" v-model="form.category_id" class="
+                                <label for="name">Category Name</label>
+                                <input type="text" v-model="form.name" class="
                                         w-full
                                         px-4
                                         py-2
@@ -28,13 +28,13 @@
                                         focus:ring-blue-600
                                     " />
                                 <div class="bg-red-100 my-3 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                                    role="alert" v-if="errors.category_id">
-                                    <strong class="font-bold">Category is not selected</strong>
+                                    role="alert" v-if="errors.name">
+                                    <strong class="font-bold">{{ errors.name }}</strong>
                                 </div>
                             </div>
-                            <div>
-                                <label for="title">Title</label>
-                                <input type="text" v-model="form.title" class="
+                            <div class="mt-4">
+                                <label for="name">Slug Name</label>
+                                <input type="text" v-model="form.slug" class="
                                         w-full
                                         px-4
                                         py-2
@@ -46,30 +46,10 @@
                                         focus:ring-blue-600
                                     " />
                                 <div class="bg-red-100 my-3 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                                    role="alert" v-if="errors.title">
-                                    <strong class="font-bold">{{ errors.title }}</strong>
+                                    role="alert" v-if="errors.slug">
+                                    <strong class="font-bold">{{ errors.slug }}</strong>
                                 </div>
                             </div>
-                            <div>
-                                <label for="title">Description</label>
-                                <textarea name="description" type="text" v-model="form.description" class="
-                                        w-full
-                                        px-4
-                                        py-2
-                                        mt-2
-                                        border
-                                        rounded-md
-                                        focus:outline-none
-                                        focus:ring-1
-                                        focus:ring-blue-600
-                                    ">
-                                </textarea>
-                                <div class="bg-red-100 my-3 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                                    role="alert" v-if="errors.description">
-                                    <strong class="font-bold">{{ errors.description }}</strong>
-                                </div>
-                            </div>
-
                             <!-- submit -->
                             <div class="flex items-center mt-4">
                                 <button class="
@@ -101,20 +81,20 @@ export default {
     },
     setup(props) {
         const form = useForm({
-            title: props.post.title,
-            category_id: props.post.category_id,
-            description: props.post.description,
+            id: props.category.id,
+            slug: props.category.slug,
+            name: props.category.name,
         });
 
         return { form };
     },
     props: {
-        post: Object,
+        category: Object,
         errors: Object
     },
     methods: {
         submit() {
-            this.form.put(route("posts.update", this.post.id));
+            this.form.put(route("categories.update", this.category.id));
         },
     },
 };

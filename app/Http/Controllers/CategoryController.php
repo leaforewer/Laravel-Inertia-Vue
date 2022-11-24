@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Str;
+
+
 
 class CategoryController extends Controller
 {
@@ -14,7 +19,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Category/Index', [
+            "categories" => Category::orderBy('id', 'ASC')->paginate(10)
+        ]);
     }
 
     /**
@@ -24,7 +31,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Category/Create');
     }
 
     /**
@@ -35,7 +42,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Category::create(
+            $request->validate(
+                [
+                    'name' => ['required', 'max:50'],
+                    STR::slug('slug') => ['required']
+                ]
+            )
+        );
+
+        return Redirect::route('categories.index')->with('cat_message', 'Your Category is Stored Successfully in the database');
     }
 
     /**
@@ -57,7 +73,13 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return Inertia::render('Category/Edit', [
+            'category' => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'slug' => $category->slug
+            ]
+        ]);
     }
 
     /**
@@ -69,7 +91,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'max:50'],
+            'slug' => ['required']
+        ]);
+        $category->update($data);
+
+
+        return Redirect::route('categories.index')->with('cat_message', 'Category Edit Successfull');
     }
 
     /**
@@ -80,6 +109,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return Redirect::route('categories.index')->with('cat_message', 'Category Delete Successfull');
     }
 }
