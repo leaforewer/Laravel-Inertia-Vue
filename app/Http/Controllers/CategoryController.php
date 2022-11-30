@@ -12,12 +12,8 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index() : \Inertia\Response
     {
         return Inertia::render('Category/Index', [
             "categories" => Category::orderBy('id', 'ASC')->paginate(10)
