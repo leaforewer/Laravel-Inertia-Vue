@@ -12,16 +12,12 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index() : \Inertia\Response
     {
-        return Inertia::render('Category/Index', [
-            "categories" => Category::orderBy('id', 'ASC')->paginate(10)
-        ]);
+        $categories = Category::orderBy('id', 'ASC')->paginate(10);
+
+        return Inertia::render('Category/Index', compact('categories'));
     }
 
     /**
@@ -42,14 +38,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        Category::create(
-            $request->validate(
-                [
-                    'name' => ['required', 'max:50'],
-                    STR::slug('slug') => ['required']
-                ]
-            )
-        );
+        $this->validation($request);
+
+        Category::create([
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+        ]);
 
         return Redirect::route('categories.index')->with('cat_message', 'Your Category is Stored Successfully in the database');
     }
@@ -91,12 +85,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $data = $request->validate([
-            'name' => ['required', 'max:50'],
-            'slug' => ['required']
-        ]);
-        $category->update($data);
+        $this->validation($request);
 
+        $category->update([
+            'name' => $request->input('name'),
+            'slug' => $request->input('slug'),
+        ]);
 
         return Redirect::route('categories.index')->with('cat_message', 'Category Edit Successfull');
     }
@@ -112,5 +106,16 @@ class CategoryController extends Controller
         $category->delete();
 
         return Redirect::route('categories.index')->with('cat_message', 'Category Delete Successfull');
+    }
+
+    private function validation(Request $request): void
+    {
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required',
+        ], [
+            'name.required' => 'Category requires a name',
+            'slug.required' => 'Category requires a slug',
+        ]);
     }
 }
